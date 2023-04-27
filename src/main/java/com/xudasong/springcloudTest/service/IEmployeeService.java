@@ -1,6 +1,6 @@
 package com.xudasong.springcloudTest.service;
 
-import com.xudasong.springcloudTest.entity.UserDb;
+import com.xudasong.springcloudTest.entity.Employee;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -8,9 +8,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  *  服务类
  * </p>
  *
- * @author xudasong
+ * @author tingdian
  * @since 2023-04-27
  */
-public interface UserDbService extends IService<UserDb> {
+public interface IEmployeeService extends IService<Employee> {
 
 }

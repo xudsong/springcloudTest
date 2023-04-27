@@ -5,66 +5,64 @@ package com.xudasong.springcloudTest.utils;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.GlobalConfig;
-import com.baomidou.mybatisplus.generator.config.PackageConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
+import com.baomidou.mybatisplus.generator.FastAutoGenerator;
+import com.baomidou.mybatisplus.generator.config.*;
+import com.baomidou.mybatisplus.generator.config.rules.DateType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
+import com.baomidou.mybatisplus.generator.engine.VelocityTemplateEngine;
 
 import java.sql.SQLException;
+import java.util.Collections;
 
 public class MysqlGenerator {
 
     public static void main(String[] args) throws SQLException {
 
-        //1. 全局配置
-        GlobalConfig config = new GlobalConfig();
-        config.setActiveRecord(true) // 是否支持AR模式
-                .setAuthor("xudasong") // 作者
-                //.setOutputDir("D:\\workspace_mp\\mp03\\src\\main\\java") // 生成路径
-                .setOutputDir("E:\\spring-cloud-test\\src\\main\\java") // 生成路径
-                .setFileOverride(true)  // 文件覆盖
-                .setIdType(IdType.AUTO) // 主键策略
-                .setServiceName("%sService")  // 设置生成的service接口的名字的首字母是否为I
-                // IEmployeeService
-                .setBaseResultMap(true)//生成基本的resultMap
-                .setBaseColumnList(true);//生成基本的SQL片段
+        FastAutoGenerator.create("jdbc:postgresql://localhost:5432/mytest?useSSL=false", "postgres", "root")//数据库配置
+                .globalConfig(builder -> {
+                    builder.author("tingdian") // 设置作者
+                            .enableSwagger() // 开启 swagger 模式
+                            .fileOverride() // 覆盖已生成文件
+                            .dateType(DateType.ONLY_DATE)// 日期类型
+                            .outputDir("E:\\spring-cloud-test\\src\\main\\java"); // 指定输出目录
+                })
+                .packageConfig(builder -> {
+                    builder.parent("com.xudasong.springcloudTest") // 设置父包名
+                            //.moduleName("sys") // 设置父包模块名
+                            .controller("controller")
+                            .mapper("mapper")
+                            .service("service")
+                            .serviceImpl("service.impl")
+                            .entity("entity")
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "E:\\spring-cloud-test\\src\\main\\resources\\mapper")); // 设置mapperXml生成路径
+                })
+                .strategyConfig(builder -> {
+                    builder
+                            .addInclude(new String[] {"employee","dept","user_db"}) // 设置需要生成的表名
+//                            .addTablePrefix("test_") // 设置过滤表前缀
+                            //entity配置
+                            .entityBuilder()
+                            .enableLombok()
+                            //.superClass(com.cloud.model.common.BaseDataEntity.class)//继承父类
+                            //.logicDeleteColumnName("del_flag")//逻辑删除字段
+                            .enableTableFieldAnnotation()
+                            //controller配置
+                            .controllerBuilder()
+                            .formatFileName("%sController")
+                            .enableRestStyle()
+                            //service配置
+                            .serviceBuilder()
+                            .formatServiceFileName("I%sService")
+                            .formatServiceImplFileName("%sServiceImpl")
+                            //dao配置
+                            .mapperBuilder()
+                            .formatMapperFileName("%sDao")
+                            .formatXmlFileName("%sMapper")
+                            .enableMapperAnnotation();
+                })
 
-        //2. 数据源配置
-        DataSourceConfig dsConfig = new DataSourceConfig();
-        dsConfig.setDbType(DbType.POSTGRE_SQL)  // 设置数据库类型
-                //.setDriverName("com.mysql.jdbc.Driver")
-                .setDriverName("org.postgresql.Driver")
-                .setUrl("jdbc:postgresql://localhost:5432/mytest?useSSL=false")
-                .setUsername("postgres")
-                .setPassword("root");
-
-        //3. 策略配置globalConfiguration中
-        StrategyConfig stConfig = new StrategyConfig();
-        stConfig.setCapitalMode(true) //全局大写命名
-                .setEntityLombokModel(true)
-                .setColumnNaming(NamingStrategy.underline_to_camel) //字段名是否使用下划线
-                .setNaming(NamingStrategy.underline_to_camel) // 数据库表映射到实体的命名策略
-                //.setTablePrefix("tbl_")  //此处可以修改为自己的表前缀
-                .setInclude(new String[] {"employee","dept","user_db"});  // 需要生成的表
-
-        //4. 包名策略配置
-        PackageConfig pkConfig = new PackageConfig();
-        pkConfig.setParent("com.example.springbootdemo")
-                .setMapper("mapper")//dao
-                .setService("service")//servcie
-                .setController("controller")//controller
-                .setEntity("entity")
-                .setXml("mapper");//mapper.xml
-
-        //5. 整合配置
-        AutoGenerator ag = new AutoGenerator();
-        ag.setGlobalConfig(config)
-                .setDataSource(dsConfig)
-                .setStrategy(stConfig)
-                .setPackageInfo(pkConfig);
-
-        //6. 执行
-        ag.execute();
+                // 使用Freemarker引擎模板，默认的是Velocity引擎模板
+                .templateEngine(new VelocityTemplateEngine())
+                .execute();
     }
 }
