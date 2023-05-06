@@ -1,7 +1,8 @@
 package com.xudasong.springcloudTest.controller;
 
 
-import com.xudasong.springcloudTest.entity.UserDb;
+import com.xudasong.springcloudTest.pojo.po.UserDbPo;
+import com.xudasong.springcloudTest.pojo.vo.BaseResult;
 import com.xudasong.springcloudTest.service.IUserDbService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,8 @@ public class UserDbController {
     private final IUserDbService userDbService;
 
     @GetMapping("/get")
-    public List<UserDb> get(){
-        return userDbService.list();
+    public BaseResult<List<UserDbPo>> get(){
+        return BaseResult.OK(userDbService.list());
     }
 
 }

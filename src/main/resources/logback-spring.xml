@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--    <include resource="base-logback.xml"/>-->
+    <property name="PROJECT_NAME" value="eser" />
+    <property name="LOG_HOME" value="/app/logs" />
+
+    <!-- 自定义获取主机名 -->
+    <!--    <define name="hostName" class="com.jiduauto.smpcar.util.CanonicalHostNamePropertyDefiner"/>-->
+
+    <!-- 控制台日志输出配置 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>
+                <!-- yyyy-MM-dd HH:mm:ss.SSS 服务名 hostname 日志级别 [线程名] 类名 方法 [行号] - 具体日志 -->
+                <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度, %C全类名，%M方法名，%L行号，%msg：日志消息，%n是换行符-->
+                %d{yyyy-MM-dd HH:mm:ss.SSS} ${PROJECT_NAME} ${hostName} %level [%thread] %C{36} %M [%L] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="LOGFILEAPPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${PROJECT_NAME}/serverlog.${hostName}.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>
+                ${LOG_HOME}/${PROJECT_NAME}/serverlog.${hostName}.log.%d{yyyy-MM-dd}_%i
+            </fileNamePattern>
+            <maxHistory>3</maxHistory>
+            <!--日志总文件最大的大小-->
+            <totalSizeCap>10GB</totalSizeCap>
+            <!--单个日志文件最大的大小-->
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>500MB</MaxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+
+        </rollingPolicy>
+
+        <encoder charset="UTF-8">
+            <pattern>
+                <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度, %C全类名，%M方法名，%L行号 %msg：日志消息，%n是换行符-->
+                %d{yyyy-MM-dd HH:mm:ss.SSS} ${PROJECT_NAME} ${hostName} %level [%thread] %C{36} %M [%L] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 错误日志 error log-->
+    <!--        <appender name="ProgramErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+    <!--                <file>${LOG_HOME}/${PROJECT_NAME}_error.log</file>-->
+    <!--                <filter class="ch.qos.logback.classic.filter.ThresholdFilter">-->
+    <!--                        <level>error</level>-->
+    <!--                </filter>-->
+    <!--                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+    <!--                        <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}_error-%d{yyyy-MM-dd}.log</fileNamePattern>-->
+    <!--                </rollingPolicy>-->
+    <!--                <encoder charset="UTF-8">-->
+    <!--                        <pattern>-->
+    <!--                                %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level - %msg%n-->
+    <!--                        </pattern>-->
+    <!--                </encoder>-->
+    <!--        </appender>-->
+
+    <!-- 根级别 -->
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="LOGFILEAPPENDER" />
+        <!--                <appender-ref ref="ProgramErrorLog" />-->
+    </root>
+
+
+    <!-- sql日志配置 -->
+    <logger name="org.springframework" level="ERROR" />
+    <logger name="com.google" level="ERROR" />
+    <logger name="org.apache" level="ERROR" />
+    <logger name="com.alibaba.druid"  level="ERROR" />
+    <logger name="com.ibatis.sqlmap.engine.cache.CacheModel" level="info" />
+    <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="info" />
+    <logger name="java.sql.Connection" level="info" />
+    <logger name="com.ibatis" level="info" />
+    <logger name="java.sql.Statement" level="info" />
+    <logger name="java.sql.ResultSet" level="info" />
+    <logger name="com.ibatis.sqlmap.engine.builder.xml.SqlMapParser" level="info" />
+    <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientImpl" level="info" />
+    <logger name="java.sql.PreparedStatement" level="info" />
+    <logger name="org.activiti.engine.impl.persistence.entity" level="info" />
+</configuration>

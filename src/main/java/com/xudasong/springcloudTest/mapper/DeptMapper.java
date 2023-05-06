@@ -1,7 +1,7 @@
 package com.xudasong.springcloudTest.mapper;
 
-import com.xudasong.springcloudTest.entity.Dept;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.xudasong.springcloudTest.pojo.po.DeptPo;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @author tingdian
  * @since 2023-04-27
  */
-@Mapper
-public interface DeptDao extends BaseMapper<Dept> {
+public interface DeptMapper extends BaseMapper<DeptPo> {
 
 }

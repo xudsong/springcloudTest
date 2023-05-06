@@ -1,13 +1,13 @@
-package com.xudasong.springcloudTest.entity;
+package com.xudasong.springcloudTest.pojo.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -19,20 +19,26 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("dept")
-@ApiModel(value = "Dept对象", description = "")
-public class Dept implements Serializable {
+@TableName("employee")
+@ApiModel(value = "Employee对象", description = "")
+public class EmployeePo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @TableId("id")
     private Integer id;
 
-    @TableField("dept")
-    private String dept;
+    @TableField("name")
+    private String name;
 
-    @TableField("fac_id")
-    private Integer facId;
+    @TableField("age")
+    private Integer age;
+
+    @TableField("sal")
+    private String sal;
+
+    @TableField("address")
+    private String address;
 
 
 }
